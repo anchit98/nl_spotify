@@ -1,0 +1,15 @@
+# Combined dependencies for Render (API + in-process Synthesize pipeline).
+# Installs backend and Phases 1–3 into one Python environment.
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+python-dotenv>=1.0.1
+supabase>=2.31.0
+pydantic>=2.11.7
+httpx>=0.28.1
+PyYAML>=6.0.1
+google-play-scraper>=1.2.7
+beautifulsoup4>=4.12.3
+tenacity>=9.0.0
+langdetect==1.0.9
+emoji==2.11.0
+tqdm==4.66.2

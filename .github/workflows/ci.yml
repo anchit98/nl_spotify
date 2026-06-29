@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  frontend:
+    name: Frontend lint & build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:8000
+        run: npm run build
+
+  backend:
+    name: Backend import check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: backend/requirements-deploy.txt
+
+      - name: Install dependencies
+        run: pip install -r backend/requirements-deploy.txt
+
+      - name: Verify app imports
+        env:
+          SUPABASE_PROJECT_URL: https://example.supabase.co
+          SUPABASE_PROJECT_ANON_KEY: placeholder
+          GROQ_API_KEY: placeholder
+        run: |
+          PYTHONPATH=backend/src python -c "from backend_api.main import app; assert app.title"

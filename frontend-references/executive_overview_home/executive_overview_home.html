@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Discovery Insights</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Custom Animations */
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+        
+        .stagger-1 { animation-delay: 100ms; }
+        .stagger-2 { animation-delay: 200ms; }
+        .stagger-3 { animation-delay: 300ms; }
+        .stagger-4 { animation-delay: 400ms; }
+        .stagger-5 { animation-delay: 500ms; }
+        .stagger-6 { animation-delay: 600ms; }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        .animate-pulse-ring::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            box-shadow: 0 0 0 2px theme('colors.primary-container');
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        
+        /* Inner Glow Hover */
+        .hover-inner-glow:hover {
+            box-shadow: inset 0 0 0 1px theme('colors.primary-container');
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ffb4ab",
+                        "status-error": "#FF5252",
+                        "on-surface-variant": "#bccbb9",
+                        "surface-container-low": "#1c1b1c",
+                        "on-tertiary-container": "#730a1b",
+                        "primary-fixed": "#72fe8f",
+                        "tertiary": "#ffb3b3",
+                        "on-primary-fixed": "#002108",
+                        "tertiary-fixed": "#ffdad9",
+                        "surface-container-highest": "#353436",
+                        "error-container": "#93000a",
+                        "tertiary-fixed-dim": "#ffb3b3",
+                        "outline-variant": "#3d4a3d",
+                        "primary": "#53e076",
+                        "on-primary-container": "#004118",
+                        "surface-variant": "#353436",
+                        "tertiary-container": "#ff767b",
+                        "inverse-on-surface": "#313031",
+                        "on-tertiary-fixed-variant": "#881d28",
+                        "primary-fixed-dim": "#53e076",
+                        "surface-container-lowest": "#0e0e0f",
+                        "on-surface": "#e5e2e3",
+                        "on-secondary-container": "#006a70",
+                        "status-warning": "#FFB020",
+                        "surface-dim": "#131314",
+                        "on-secondary": "#00363a",
+                        "inverse-surface": "#e5e2e3",
+                        "on-primary-fixed-variant": "#005320",
+                        "surface-container": "#201f20",
+                        "on-secondary-fixed-variant": "#004f54",
+                        "primary-container": "#1db954",
+                        "surface-tint": "#53e076",
+                        "surface": "#131314",
+                        "surface-container-high": "#2a2a2b",
+                        "secondary-fixed": "#74f5ff",
+                        "outline": "#869585",
+                        "surface-bright": "#3a393a",
+                        "background": "#131314",
+                        "secondary-fixed-dim": "#00dbe7",
+                        "surface-low": "#1C1C1E",
+                        "border-subtle": "rgba(255, 255, 255, 0.08)",
+                        "secondary-container": "#00f1fe",
+                        "secondary": "#ddfcff",
+                        "on-tertiary": "#680114",
+                        "on-error": "#690005",
+                        "on-error-container": "#ffdad6",
+                        "on-background": "#e5e2e3",
+                        "surface-high": "#2C2C2E",
+                        "text-muted": "#8E8E93",
+                        "on-secondary-fixed": "#002022",
+                        "on-tertiary-fixed": "#400009",
+                        "on-primary": "#003914",
+                        "inverse-primary": "#006e2d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "card-gap": "16px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "margin-desktop": "40px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "theme-sentence": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-main": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "metadata": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "theme-sentence": ["18px", { "lineHeight": "1.5", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-main": ["15px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "metadata": ["13px", { "lineHeight": "1.4", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex font-body-main selection:bg-primary-container selection:text-on-primary-container">
+<!-- Desktop Sidebar -->
+<aside class="hidden md:flex flex-col py-8 gap-y-4 bg-surface-container-lowest h-screen w-64 fixed left-0 top-0 border-r border-subtle flat no shadows z-40">
+<div class="px-6 mb-8 flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-high flex items-center justify-center border border-subtle overflow-hidden relative">
+<div class="absolute inset-0 bg-cover bg-center opacity-50 mix-blend-screen" data-alt="A macro photograph of an abstract, dark obsidian surface with very subtle, organic light reflections in Spotify green. The texture is smooth but slightly uneven, conveying a sense of organic tech. Studio lighting, highly detailed, moody atmosphere." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBqGeOLuHedoMJMXwRr6DMtneOcnGZRkkPHN3WC9Q50brhJyHeZjoLH7bGLiia4ji1t-ercC8boTZ0r3MaiPbHw8yI1WZvqeEQBoJa9D6D_TAuDuZKd2uqE38CYLDHBWcGpYzfIBl85H63d0jTZs-Aryrd0ZPUx8rK8qXwLJTfyERA40u88cIl_uVxc4tpLQKz1JgqAE3P31Jx9FrAgM6Bcb0bMau0eg8t_jXUZX5sYa-I3biYs8OMFtHqn2vWNHTH5qbDt2Ww4b4mJ')"></div>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">graphic_eq</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md text-primary leading-tight">Discovery Engine</h1>
+<p class="font-metadata text-metadata text-on-surface-variant">v4.2-stable</p>
+</div>
+</div>
+<div class="px-4 mb-4">
+<button class="w-full bg-primary-container hover:bg-primary text-on-primary-container font-label-caps text-label-caps py-3 px-4 rounded-full flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Run
+            </button>
+</div>
+<nav class="flex-1 px-2 space-y-1">
+<a class="flex items-center gap-3 py-2 px-4 rounded-lg text-primary font-bold border-l-2 border-primary pl-4 bg-primary/5 translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-caps text-label-caps">Home</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-4 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high pl-4 transition-all" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-caps text-label-caps">Analysis</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-4 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high pl-4 transition-all" href="#">
+<span class="material-symbols-outlined">topic</span>
+<span class="font-label-caps text-label-caps">Themes</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-4 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high pl-4 transition-all" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="font-label-caps text-label-caps">Metadata</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-4 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high pl-4 transition-all" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-caps text-label-caps">History</span>
+</a>
+</nav>
+<div class="mt-auto px-2 space-y-1 pt-4 border-t border-subtle mx-4">
+<a class="flex items-center gap-3 py-2 px-4 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+<span class="font-label-caps text-label-caps">Documentation</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-4 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">contact_support</span>
+<span class="font-label-caps text-label-caps">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 flex flex-col min-h-screen pt-16 md:pt-0">
+<!-- Mobile Top Nav -->
+<header class="md:hidden bg-surface/75 backdrop-blur-xl fixed top-0 w-full z-50 border-b border-subtle flat no shadows flex justify-between items-center px-margin-mobile h-16">
+<span class="font-headline-md text-headline-md font-bold text-primary">Discovery Insights</span>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</header>
+<div class="p-margin-mobile md:p-margin-desktop flex-1 max-w-[1600px] mx-auto w-full">
+<!-- Page Header -->
+<header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 animate-fade-in-up">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Music Discovery Insights</h1>
+<span class="px-2 py-1 rounded bg-surface-high border border-subtle font-label-caps text-label-caps text-text-muted flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span>
+                            Live
+                        </span>
+</div>
+<p class="font-theme-sentence text-theme-sentence text-on-surface-variant max-w-2xl">
+                        Evidence from public user feedback. Analyzed from 23,166 recent reviews across multiple platforms.
+                    </p>
+<div class="flex items-center gap-4 mt-4 font-metadata text-metadata text-text-muted">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">forum</span> 23,166 reviews</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">update</span> Last updated: 16 Jun 2026</span>
+</div>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<button class="h-10 px-6 rounded-full border border-subtle bg-surface-low hover:bg-surface-high text-on-surface font-label-caps text-label-caps transition-all">
+                        Export Report
+                    </button>
+<button class="h-10 px-6 rounded-full bg-primary-container text-on-primary-container font-label-caps text-label-caps hover:bg-primary transition-colors flex items-center gap-2 shadow-[0_0_15px_rgba(29,185,84,0.3)]">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                        Synthesize now
+                    </button>
+</div>
+</header>
+<!-- Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-card-gap">
+<!-- Row 1: Hero Metrics (Spans 8 cols) & Synthesis Control (Spans 4 cols) -->
+<!-- A. Hero Metrics -->
+<div class="md:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-card-gap animate-fade-in-up stagger-1">
+<!-- Metric 1 -->
+<div class="bg-surface-low border border-subtle rounded-xl p-5 flex flex-col justify-between hover:bg-surface-high hover:-translate-y-0.5 hover-inner-glow transition-all duration-150">
+<div class="flex items-center justify-between mb-4">
+<span class="font-metadata text-metadata text-text-muted">Total Reviews</span>
+<span class="material-symbols-outlined text-primary opacity-80">forum</span>
+</div>
+<div>
+<div class="font-headline-lg text-headline-lg text-on-surface">23,166</div>
+<div class="font-metadata text-metadata text-primary flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +12% this week
+                            </div>
+</div>
+</div>
+<!-- Metric 2 -->
+<div class="bg-surface-low border border-subtle rounded-xl p-5 flex flex-col justify-between hover:bg-surface-high hover:-translate-y-0.5 hover-inner-glow transition-all duration-150 relative overflow-hidden">
+<div class="absolute right-0 top-0 w-24 h-24 bg-secondary-container/10 blur-xl rounded-full -translate-y-1/2 translate-x-1/4"></div>
+<div class="flex items-center justify-between mb-4 relative z-10">
+<span class="font-metadata text-metadata text-text-muted">Core Questions</span>
+<span class="material-symbols-outlined text-secondary-container opacity-80">quiz</span>
+</div>
+<div class="relative z-10">
+<div class="font-headline-lg text-headline-lg text-on-surface">6<span class="text-text-muted text-xl">/6</span></div>
+<div class="font-metadata text-metadata text-on-surface-variant flex items-center gap-1 mt-1">
+                                Fully answered
+                            </div>
+</div>
+</div>
+<!-- Metric 3 -->
+<div class="bg-surface-low border border-subtle rounded-xl p-5 flex flex-col justify-between hover:bg-surface-high hover:-translate-y-0.5 hover-inner-glow transition-all duration-150">
+<div class="flex items-center justify-between mb-4">
+<span class="font-metadata text-metadata text-text-muted">Extracted Themes</span>
+<span class="material-symbols-outlined text-primary opacity-80">category</span>
+</div>
+<div>
+<div class="font-headline-lg text-headline-lg text-on-surface">30</div>
+<div class="font-metadata text-metadata text-text-muted flex items-center gap-1 mt-1">
+                                Across 4 categories
+                            </div>
+</div>
+</div>
+<!-- Metric 4 -->
+<div class="bg-surface-low border border-subtle rounded-xl p-5 flex flex-col justify-between hover:bg-surface-high hover:-translate-y-0.5 hover-inner-glow transition-all duration-150">
+<div class="flex items-center justify-between mb-4">
+<span class="font-metadata text-metadata text-text-muted">Avg Rating</span>
+<span class="material-symbols-outlined text-status-warning opacity-80">star</span>
+</div>
+<div>
+<div class="font-headline-lg text-headline-lg text-on-surface">2.5</div>
+<div class="font-metadata text-metadata text-status-error flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[14px]">trending_down</span> -0.2 from last run
+                            </div>
+</div>
+</div>
+</div>
+<!-- B. Synthesis Control -->
+<div class="md:col-span-4 bg-surface-low border border-subtle rounded-xl p-6 relative overflow-hidden animate-fade-in-up stagger-2 flex flex-col justify-between hover:bg-surface-high transition-colors">
+<!-- Subtle background decoration -->
+<div class="absolute -right-10 -top-10 w-40 h-40 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-[20px]">sync</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Synthesis Status</h3>
+</div>
+<p class="font-body-main text-body-main text-on-surface-variant mb-6">
+                            The engine has ingested 1,204 new reviews since the last full synthesis.
+                        </p>
+</div>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex flex-col">
+<span class="font-metadata text-metadata text-text-muted">Engine Readiness</span>
+<span class="font-label-caps text-label-caps text-primary flex items-center gap-2 mt-1">
+<span class="w-2 h-2 rounded-full bg-primary-container relative animate-pulse-ring"></span>
+                                Ready to Process
+                            </span>
+</div>
+<button class="w-14 h-14 rounded-full bg-surface-high border border-subtle hover:border-primary-container hover:text-primary-container flex items-center justify-center transition-all group">
+<span class="material-symbols-outlined text-[28px] group-hover:rotate-180 transition-transform duration-500">play_arrow</span>
+</button>
+</div>
+</div>
+<!-- Row 2: Executive Summary (6) & Source Mix (6) -->
+<!-- C. Executive Summary -->
+<div class="md:col-span-6 bg-surface-low border border-subtle rounded-xl p-6 flex flex-col animate-fade-in-up stagger-3 hover-inner-glow transition-all">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-container text-[20px]">subject</span>
+                            Executive Summary
+                        </h3>
+<button class="text-on-surface-variant hover:text-on-surface p-1 rounded hover:bg-surface-high transition-colors" title="Copy Summary">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+</button>
+</div>
+<div class="font-body-main text-body-main text-on-surface-variant space-y-4 flex-1">
+<p>
+                            Users consistently express frustration with the new algorithmic discovery features introduced in v4.1. While overall engagement time has increased marginally, qualitative sentiment has dropped significantly regarding <span class="text-secondary-container">"control over playback"</span>.
+                        </p>
+<p>
+                            The primary pain point centers on the inability to easily dismiss AI-suggested tracks. Conversely, the redesign of the library interface has been received positively, particularly among power users originating from Reddit cohorts.
+                        </p>
+</div>
+<div class="mt-4 pt-4 border-t border-subtle">
+<button class="font-label-caps text-label-caps text-primary hover:text-primary-container transition-colors flex items-center gap-1">
+                            Read full analysis <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- E. Source Mix -->
+<div class="md:col-span-6 bg-surface-low border border-subtle rounded-xl p-6 flex flex-col animate-fade-in-up stagger-4 hover-inner-glow transition-all">
+<h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary text-[20px]">pie_chart</span>
+                        Source Mix
+                    </h3>
+<div class="flex-1 flex items-center gap-8">
+<!-- Simulated Donut Chart using CSS conic-gradient -->
+<div class="relative w-32 h-32 shrink-0">
+<div class="w-full h-full rounded-full" style="background: conic-gradient(
+                                theme('colors.primary-container') 0% 45%, 
+                                theme('colors.secondary-container') 45% 75%, 
+                                theme('colors.surface-high') 75% 90%, 
+                                theme('colors.text-muted') 90% 100%
+                            );"></div>
+<!-- Inner cutout for donut -->
+<div class="absolute inset-0 m-auto w-24 h-24 bg-surface-low rounded-full flex flex-col items-center justify-center border border-subtle shadow-inner">
+<span class="font-metadata text-metadata text-text-muted">Total</span>
+<span class="font-headline-md text-headline-md text-on-surface leading-none">23k</span>
+</div>
+</div>
+<!-- Legend -->
+<div class="flex-1 space-y-3">
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-sm bg-primary-container"></div>
+<span class="font-body-main text-body-main text-on-surface group-hover:text-primary-container transition-colors">App Store</span>
+</div>
+<span class="font-metadata text-metadata text-text-muted">45% (10,424)</span>
+</div>
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-sm bg-secondary-container"></div>
+<span class="font-body-main text-body-main text-on-surface group-hover:text-secondary-container transition-colors">Google Play</span>
+</div>
+<span class="font-metadata text-metadata text-text-muted">30% (6,949)</span>
+</div>
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-sm bg-surface-high border border-subtle"></div>
+<span class="font-body-main text-body-main text-on-surface group-hover:text-white transition-colors">Reddit</span>
+</div>
+<span class="font-metadata text-metadata text-text-muted">15% (3,474)</span>
+</div>
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-sm bg-text-muted"></div>
+<span class="font-body-main text-body-main text-on-surface group-hover:text-white transition-colors">Twitter/X</span>
+</div>
+<span class="font-metadata text-metadata text-text-muted">10% (2,319)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Row 3: Top Pain Points (Full Width or 12 col) -->
+<!-- D. Top Pain Points -->
+<div class="col-span-1 md:col-span-12 bg-surface-low border border-subtle rounded-xl p-6 animate-fade-in-up stagger-5 hover-inner-glow transition-all">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-status-error text-[20px]">warning</span>
+                            Top Pain Points Ranking
+                        </h3>
+<span class="font-metadata text-metadata text-text-muted">By Mentions &amp; Severity</span>
+</div>
+<div class="space-y-5">
+<!-- Bar 1 -->
+<div>
+<div class="flex justify-between font-body-main text-body-main mb-1">
+<span class="text-on-surface">Algorithm Quality / Repetition</span>
+<span class="text-status-error font-medium">High Impact (4,210 mentions)</span>
+</div>
+<div class="w-full bg-surface-dim h-2 rounded-full overflow-hidden border border-subtle">
+<div class="bg-status-error h-full rounded-full" style="width: 85%;"></div>
+</div>
+</div>
+<!-- Bar 2 -->
+<div>
+<div class="flex justify-between font-body-main text-body-main mb-1">
+<span class="text-on-surface">Ad Frequency Interruption</span>
+<span class="text-status-warning font-medium">Medium Impact (2,840 mentions)</span>
+</div>
+<div class="w-full bg-surface-dim h-2 rounded-full overflow-hidden border border-subtle">
+<div class="bg-status-warning h-full rounded-full" style="width: 60%;"></div>
+</div>
+</div>
+<!-- Bar 3 -->
+<div>
+<div class="flex justify-between font-body-main text-body-main mb-1">
+<span class="text-on-surface">Lack of Playback Control in Discovery</span>
+<span class="text-text-muted font-medium">Low Impact (1,150 mentions)</span>
+</div>
+<div class="w-full bg-surface-dim h-2 rounded-full overflow-hidden border border-subtle">
+<div class="bg-surface-high border border-subtle h-full rounded-full" style="width: 35%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Row 4: Question Previews (2x3 Grid within a 12 col container) -->
+<div class="col-span-1 md:col-span-12 animate-fade-in-up stagger-6 mt-4">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-text-muted">layers</span>
+                        Question Synthesis
+                    </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-card-gap">
+<!-- Q1 -->
+<a class="bg-surface-low border border-subtle rounded-xl p-5 hover:bg-surface-high hover:-translate-y-1 hover-inner-glow transition-all duration-200 group flex flex-col h-full" href="#">
+<div class="flex justify-between items-start mb-3">
+<span class="font-label-caps text-label-caps text-text-muted bg-surface-dim px-2 py-1 rounded border border-subtle">Q1</span>
+<span class="font-metadata text-metadata text-primary flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Explore <span class="material-symbols-outlined text-[14px]">arrow_outward</span>
+</span>
+</div>
+<h4 class="font-theme-sentence text-theme-sentence text-on-surface mb-2 line-clamp-2">How do users perceive the new discovery feed layout?</h4>
+<div class="mt-auto pt-4 flex items-end justify-between border-t border-subtle border-opacity-50">
+<div class="flex flex-col">
+<span class="font-metadata text-metadata text-text-muted mb-1">Top Theme</span>
+<span class="font-body-main text-body-main text-secondary-container text-sm">"Too cluttered, miss old list view"</span>
+</div>
+<div class="bg-surface-dim px-2 py-1 rounded text-xs text-text-muted border border-subtle">
+                                    n=3,240
+                                </div>
+</div>
+</a>
+<!-- Q2 -->
+<a class="bg-surface-low border border-subtle rounded-xl p-5 hover:bg-surface-high hover:-translate-y-1 hover-inner-glow transition-all duration-200 group flex flex-col h-full" href="#">
+<div class="flex justify-between items-start mb-3">
+<span class="font-label-caps text-label-caps text-text-muted bg-surface-dim px-2 py-1 rounded border border-subtle">Q2</span>
+<span class="font-metadata text-metadata text-primary flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Explore <span class="material-symbols-outlined text-[14px]">arrow_outward</span>
+</span>
+</div>
+<h4 class="font-theme-sentence text-theme-sentence text-on-surface mb-2 line-clamp-2">What is causing the drop in day-3 retention among free users?</h4>
+<div class="mt-auto pt-4 flex items-end justify-between border-t border-subtle border-opacity-50">
+<div class="flex flex-col">
+<span class="font-metadata text-metadata text-text-muted mb-1">Top Theme</span>
+<span class="font-body-main text-body-main text-status-error text-sm">"Intrusive audio ads breaking flow"</span>
+</div>
+<div class="bg-surface-dim px-2 py-1 rounded text-xs text-text-muted border border-subtle">
+                                    n=2,805
+                                </div>
+</div>
+</a>
+<!-- Q3 -->
+<a class="bg-surface-low border border-subtle rounded-xl p-5 hover:bg-surface-high hover:-translate-y-1 hover-inner-glow transition-all duration-200 group flex flex-col h-full" href="#">
+<div class="flex justify-between items-start mb-3">
+<span class="font-label-caps text-label-caps text-text-muted bg-surface-dim px-2 py-1 rounded border border-subtle">Q3</span>
+<span class="font-metadata text-metadata text-primary flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Explore <span class="material-symbols-outlined text-[14px]">arrow_outward</span>
+</span>
+</div>
+<h4 class="font-theme-sentence text-theme-sentence text-on-surface mb-2 line-clamp-2">Are users finding the new 'Lyrics Sync' feature accurate?</h4>
+<div class="mt-auto pt-4 flex items-end justify-between border-t border-subtle border-opacity-50">
+<div class="flex flex-col">
+<span class="font-metadata text-metadata text-text-muted mb-1">Top Theme</span>
+<span class="font-body-main text-body-main text-primary text-sm">"Highly accurate, love the visual flair"</span>
+</div>
+<div class="bg-surface-dim px-2 py-1 rounded text-xs text-text-muted border border-subtle">
+                                    n=1,420
+                                </div>
+</div>
+</a>
+<!-- Q4 -->
+<a class="bg-surface-low border border-subtle rounded-xl p-5 hover:bg-surface-high hover:-translate-y-1 hover-inner-glow transition-all duration-200 group flex flex-col h-full" href="#">
+<div class="flex justify-between items-start mb-3">
+<span class="font-label-caps text-label-caps text-text-muted bg-surface-dim px-2 py-1 rounded border border-subtle">Q4</span>
+<span class="font-metadata text-metadata text-primary flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Explore <span class="material-symbols-outlined text-[14px]">arrow_outward</span>
+</span>
+</div>
+<h4 class="font-theme-sentence text-theme-sentence text-on-surface mb-2 line-clamp-2">Feedback on integration with smart speakers (Alexa/Google Home).</h4>
+<div class="mt-auto pt-4 flex items-end justify-between border-t border-subtle border-opacity-50">
+<div class="flex flex-col">
+<span class="font-metadata text-metadata text-text-muted mb-1">Top Theme</span>
+<span class="font-body-main text-body-main text-secondary-container text-sm">"Connection drops randomly after 30 mins"</span>
+</div>
+<div class="bg-surface-dim px-2 py-1 rounded text-xs text-text-muted border border-subtle">
+                                    n=890
+                                </div>
+</div>
+</a>
+<!-- Q5 -->
+<a class="bg-surface-low border border-subtle rounded-xl p-5 hover:bg-surface-high hover:-translate-y-1 hover-inner-glow transition-all duration-200 group flex flex-col h-full" href="#">
+<div class="flex justify-between items-start mb-3">
+<span class="font-label-caps text-label-caps text-text-muted bg-surface-dim px-2 py-1 rounded border border-subtle">Q5</span>
+<span class="font-metadata text-metadata text-primary flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Explore <span class="material-symbols-outlined text-[14px]">arrow_outward</span>
+</span>
+</div>
+<h4 class="font-theme-sentence text-theme-sentence text-on-surface mb-2 line-clamp-2">How is the 'Collaborative Playlist' update landing?</h4>
+<div class="mt-auto pt-4 flex items-end justify-between border-t border-subtle border-opacity-50">
+<div class="flex flex-col">
+<span class="font-metadata text-metadata text-text-muted mb-1">Top Theme</span>
+<span class="font-body-main text-body-main text-primary text-sm">"Much easier to invite friends now"</span>
+</div>
+<div class="bg-surface-dim px-2 py-1 rounded text-xs text-text-muted border border-subtle">
+                                    n=2,100
+                                </div>
+</div>
+</a>
+<!-- Q6 -->
+<a class="bg-surface-low border border-subtle rounded-xl p-5 hover:bg-surface-high hover:-translate-y-1 hover-inner-glow transition-all duration-200 group flex flex-col h-full" href="#">
+<div class="flex justify-between items-start mb-3">
+<span class="font-label-caps text-label-caps text-text-muted bg-surface-dim px-2 py-1 rounded border border-subtle">Q6</span>
+<span class="font-metadata text-metadata text-primary flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Explore <span class="material-symbols-outlined text-[14px]">arrow_outward</span>
+</span>
+</div>
+<h4 class="font-theme-sentence text-theme-sentence text-on-surface mb-2 line-clamp-2">General sentiment regarding app performance on low-end Android devices.</h4>
+<div class="mt-auto pt-4 flex items-end justify-between border-t border-subtle border-opacity-50">
+<div class="flex flex-col">
+<span class="font-metadata text-metadata text-text-muted mb-1">Top Theme</span>
+<span class="font-body-main text-body-main text-status-error text-sm">"App takes too long to cold start"</span>
+</div>
+<div class="bg-surface-dim px-2 py-1 rounded text-xs text-text-muted border border-subtle">
+                                    n=1,750
+                                </div>
+</div>
+</a>
+</div>
+</div>
+</div> <!-- End Bento Grid -->
+</div>
+<!-- Footer -->
+<footer class="mt-auto bg-surface py-4 px-margin-desktop w-full border-t border-subtle flex justify-between items-center text-on-surface-variant font-metadata text-metadata flat">
+<span>© 2024 Spotify Product Insights Group</span>
+<div class="flex items-center gap-4">
+<a class="hover:text-primary transition-colors" href="#">Run ID: 88234-X</a>
+<a class="hover:text-primary transition-colors" href="#">Model v4.2</a>
+<a class="hover:text-primary transition-colors" href="#">Last Updated: 2m ago</a>
+</div>
+</footer>
+</main>
+</body></html>

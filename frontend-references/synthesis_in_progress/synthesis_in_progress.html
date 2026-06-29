@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Synthesize Flow - In Progress</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-background": "#e5e2e3",
+                        "on-secondary-container": "#006a70",
+                        "surface-container-high": "#2a2a2b",
+                        "on-primary-fixed": "#002108",
+                        "inverse-on-surface": "#313031",
+                        "tertiary-fixed": "#ffdad9",
+                        "surface-dim": "#131314",
+                        "on-primary-fixed-variant": "#005320",
+                        "primary-container": "#1db954",
+                        "primary-fixed": "#72fe8f",
+                        "outline-variant": "#3d4a3d",
+                        "surface-high": "#2C2C2E",
+                        "surface-container": "#201f20",
+                        "surface-variant": "#353436",
+                        "on-surface-variant": "#bccbb9",
+                        "secondary-fixed-dim": "#00dbe7",
+                        "on-error-container": "#ffdad6",
+                        "background": "#131314",
+                        "error-container": "#93000a",
+                        "surface-tint": "#53e076",
+                        "status-error": "#FF5252",
+                        "primary": "#53e076",
+                        "error": "#ffb4ab",
+                        "on-error": "#690005",
+                        "tertiary-container": "#ff767b",
+                        "on-secondary-fixed": "#002022",
+                        "inverse-surface": "#e5e2e3",
+                        "surface-low": "#1C1C1E",
+                        "on-tertiary": "#680114",
+                        "on-primary-container": "#004118",
+                        "surface-container-lowest": "#0e0e0f",
+                        "on-tertiary-fixed-variant": "#881d28",
+                        "surface-bright": "#3a393a",
+                        "on-primary": "#003914",
+                        "text-muted": "#8E8E93",
+                        "status-warning": "#FFB020",
+                        "on-tertiary-fixed": "#400009",
+                        "secondary": "#ddfcff",
+                        "on-tertiary-container": "#730a1b",
+                        "on-secondary": "#00363a",
+                        "on-surface": "#e5e2e3",
+                        "secondary-fixed": "#74f5ff",
+                        "secondary-container": "#00f1fe",
+                        "surface": "#131314",
+                        "inverse-primary": "#006e2d",
+                        "on-secondary-fixed-variant": "#004f54",
+                        "surface-container-highest": "#353436",
+                        "tertiary": "#ffb3b3",
+                        "primary-fixed-dim": "#53e076",
+                        "tertiary-fixed-dim": "#ffb3b3",
+                        "outline": "#869585",
+                        "surface-container-low": "#1c1b1c",
+                        "border-subtle": "rgba(255, 255, 255, 0.08)"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    },
+                    spacing: {
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "card-gap": "16px",
+                        "unit": "4px",
+                        "margin-desktop": "40px"
+                    },
+                    fontFamily: {
+                        "metadata": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "theme-sentence": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-main": ["Inter"],
+                        "headline-lg-mobile": ["Inter"]
+                    },
+                    fontSize: {
+                        "metadata": ["13px", { lineHeight: "1.4", fontWeight: "400" }],
+                        "label-caps": ["12px", { lineHeight: "1", letterSpacing: "0.05em", fontWeight: "600" }],
+                        "headline-lg": ["32px", { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "600" }],
+                        "theme-sentence": ["18px", { lineHeight: "1.5", letterSpacing: "-0.01em", fontWeight: "500" }],
+                        "headline-md": ["20px", { lineHeight: "1.3", fontWeight: "600" }],
+                        "body-main": ["15px", { lineHeight: "1.6", fontWeight: "400" }],
+                        "headline-lg-mobile": ["24px", { lineHeight: "1.2", letterSpacing: "-0.01em", fontWeight: "600" }]
+                    }
+                }
+            }
+        };
+    </script>
+<style>
+        .spinner {
+            animation: rotate 2s linear infinite;
+        }
+        .path {
+            stroke: #1DB954;
+            stroke-linecap: round;
+            animation: dash 1.5s ease-in-out infinite;
+        }
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes dash {
+            0% { stroke-dasharray: 1, 150; stroke-dashoffset: 0; }
+            50% { stroke-dasharray: 90, 150; stroke-dashoffset: -35; }
+            100% { stroke-dasharray: 90, 150; stroke-dashoffset: -124; }
+        }
+        
+        .pulse-dot {
+            animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-main antialiased overflow-hidden">
+<!-- Background Content (Muted) -->
+<div class="fixed inset-0 z-0 opacity-30 pointer-events-none filter blur-sm transition-all duration-500">
+<!-- TopNavBar Structure -->
+<header class="bg-surface/75 backdrop-blur-xl fixed top-0 w-full z-50 border-b border-subtle flex justify-between items-center px-margin-desktop h-16 w-full">
+<div class="flex items-center gap-8">
+<div class="font-headline-md text-headline-md font-bold text-primary">Discovery Insights</div>
+<nav class="hidden md:flex gap-6">
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-body-main text-body-main" href="#">Overview</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-body-main text-body-main" href="#">Questions</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-body-main text-body-main" href="#">Trends</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-body-main text-body-main" href="#">Run History</a>
+</nav>
+</div>
+</header>
+<!-- SideNavBar Structure -->
+<aside class="bg-surface-container-lowest h-screen w-64 fixed left-0 top-0 border-r border-subtle flex flex-col py-8 gap-y-4 pt-24 hidden lg:flex">
+<div class="px-4 mb-6">
+<div class="font-headline-md text-headline-md text-primary">Discovery Engine</div>
+<div class="font-metadata text-metadata text-on-surface-variant">v4.2-stable</div>
+</div>
+</aside>
+<!-- Dummy Content Grid -->
+<main class="ml-0 lg:ml-64 pt-24 px-margin-desktop grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-card-gap">
+<div class="bg-surface-low border border-subtle rounded-lg p-6 h-64"></div>
+<div class="bg-surface-low border border-subtle rounded-lg p-6 h-64"></div>
+<div class="bg-surface-low border border-subtle rounded-lg p-6 h-64"></div>
+</main>
+</div>
+<!-- Active Modal Layer -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-md">
+<div class="bg-surface-low border border-subtle rounded-xl shadow-2xl p-8 md:p-12 max-w-lg w-full mx-margin-mobile flex flex-col items-center relative overflow-hidden">
+<!-- Subtle Top Glow -->
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-container/50 to-transparent"></div>
+<!-- Morphing Progress Ring -->
+<div class="relative w-32 h-32 mb-8 flex items-center justify-center">
+<svg class="spinner w-full h-full" viewbox="0 0 50 50">
+<circle class="path" cx="25" cy="25" fill="none" r="20" stroke-width="4"></circle>
+</svg>
+<!-- Inner Icon -->
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="auto_awesome">auto_awesome</span>
+</div>
+</div>
+<!-- Title -->
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-2 text-center">Synthesis in progress</h2>
+<p class="font-body-main text-body-main text-on-surface-variant text-center mb-10 max-w-sm">
+                Aggregating data points across Discovery Engine. This may take a few moments.
+            </p>
+<!-- Vertical Stepper -->
+<div class="w-full max-w-xs space-y-6">
+<!-- Step 1: Done -->
+<div class="flex items-start gap-4 opacity-75">
+<div class="flex flex-col items-center mt-1">
+<div class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="check">check</span>
+</div>
+<div class="w-0.5 h-8 bg-surface-variant my-1"></div>
+</div>
+<div>
+<div class="font-label-caps text-label-caps text-on-surface mb-1">Step 1</div>
+<div class="font-metadata text-metadata text-on-surface-variant">Collecting inputs</div>
+</div>
+</div>
+<!-- Step 2: Running -->
+<div class="flex items-start gap-4">
+<div class="flex flex-col items-center mt-1">
+<div class="w-6 h-6 rounded-full border-2 border-primary bg-primary/10 flex items-center justify-center relative">
+<div class="w-2 h-2 rounded-full bg-primary pulse-dot"></div>
+</div>
+<div class="w-0.5 h-8 bg-surface-variant my-1"></div>
+</div>
+<div>
+<div class="font-label-caps text-label-caps text-primary mb-1">Step 2</div>
+<div class="font-metadata text-metadata text-on-surface">Cleaning &amp; Normalizing</div>
+</div>
+</div>
+<!-- Step 3: Pending -->
+<div class="flex items-start gap-4 opacity-50">
+<div class="flex flex-col items-center mt-1">
+<div class="w-6 h-6 rounded-full border-2 border-surface-variant flex items-center justify-center">
+</div>
+</div>
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-1">Step 3</div>
+<div class="font-metadata text-metadata text-on-surface-variant">Synthesizing insights</div>
+</div>
+</div>
+</div>
+<!-- Cancel Action -->
+<button class="mt-12 font-metadata text-metadata text-on-surface-variant hover:text-on-surface transition-colors flex items-center gap-2 px-4 py-2 rounded-full hover:bg-surface-container-high border border-transparent hover:border-subtle">
+<span class="material-symbols-outlined text-[16px]" data-icon="close">close</span>
+                Cancel Process
+            </button>
+</div>
+</div>
+</body></html>

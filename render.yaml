@@ -1,0 +1,30 @@
+# Render Blueprint — deploy from repo root via Dashboard → New → Blueprint.
+# Docs: docs/deployment.md
+services:
+  - type: web
+    name: nl-spotify-api
+    runtime: python
+    plan: starter
+    region: frankfurt
+    buildCommand: pip install -r backend/requirements-deploy.txt
+    startCommand: PYTHONPATH=backend/src uvicorn backend_api.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11"
+      - key: SUPABASE_PROJECT_URL
+        sync: false
+      - key: SUPABASE_PROJECT_ANON_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
+      - key: CORS_ORIGINS
+        sync: false
+      - key: CORS_ORIGIN_REGEX
+        value: https://.*\.vercel\.app
+      - key: REDDIT_USER_AGENT
+        sync: false
+      - key: ENABLED_SOURCES
+        value: app_store,google_play,reddit,community_forum,social_media

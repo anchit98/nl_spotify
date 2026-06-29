@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Run History - Discovery Engine</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#e5e2e3",
+                        "on-secondary-container": "#006a70",
+                        "surface-container-high": "#2a2a2b",
+                        "on-primary-fixed": "#002108",
+                        "inverse-on-surface": "#313031",
+                        "tertiary-fixed": "#ffdad9",
+                        "surface-dim": "#131314",
+                        "on-primary-fixed-variant": "#005320",
+                        "primary-container": "#1db954",
+                        "primary-fixed": "#72fe8f",
+                        "outline-variant": "#3d4a3d",
+                        "surface-high": "#2C2C2E",
+                        "surface-container": "#201f20",
+                        "surface-variant": "#353436",
+                        "on-surface-variant": "#bccbb9",
+                        "secondary-fixed-dim": "#00dbe7",
+                        "on-error-container": "#ffdad6",
+                        "background": "#131314",
+                        "error-container": "#93000a",
+                        "surface-tint": "#53e076",
+                        "status-error": "#FF5252",
+                        "primary": "#53e076",
+                        "error": "#ffb4ab",
+                        "on-error": "#690005",
+                        "tertiary-container": "#ff767b",
+                        "on-secondary-fixed": "#002022",
+                        "inverse-surface": "#e5e2e3",
+                        "surface-low": "#1C1C1E",
+                        "on-tertiary": "#680114",
+                        "on-primary-container": "#004118",
+                        "surface-container-lowest": "#0e0e0f",
+                        "on-tertiary-fixed-variant": "#881d28",
+                        "surface-bright": "#3a393a",
+                        "on-primary": "#003914",
+                        "text-muted": "#8E8E93",
+                        "status-warning": "#FFB020",
+                        "on-tertiary-fixed": "#400009",
+                        "secondary": "#ddfcff",
+                        "on-tertiary-container": "#730a1b",
+                        "on-secondary": "#00363a",
+                        "on-surface": "#e5e2e3",
+                        "secondary-fixed": "#74f5ff",
+                        "secondary-container": "#00f1fe",
+                        "surface": "#131314",
+                        "inverse-primary": "#006e2d",
+                        "on-secondary-fixed-variant": "#004f54",
+                        "surface-container-highest": "#353436",
+                        "tertiary": "#ffb3b3",
+                        "primary-fixed-dim": "#53e076",
+                        "tertiary-fixed-dim": "#ffb3b3",
+                        "outline": "#869585",
+                        "surface-container-low": "#1c1b1c",
+                        "border-subtle": "rgba(255, 255, 255, 0.08)"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "card-gap": "16px",
+                        "unit": "4px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "metadata": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "theme-sentence": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-main": ["Inter"],
+                        "headline-lg-mobile": ["Inter"]
+                    },
+                    "fontSize": {
+                        "metadata": ["13px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "theme-sentence": ["18px", {"lineHeight": "1.5", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+                        "headline-md": ["20px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-main": ["15px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .table-row-hover:hover td {
+            background-color: theme('colors.surface-high');
+        }
+        .compare-checkbox-col {
+            width: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.2s ease-in-out;
+        }
+        .compare-mode-active .compare-checkbox-col {
+            width: 48px;
+            opacity: 1;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        /* Custom Checkbox Styling */
+        input[type="checkbox"] {
+            appearance: none;
+            background-color: transparent;
+            margin: 0;
+            font: inherit;
+            color: currentColor;
+            width: 1.15em;
+            height: 1.15em;
+            border: 1px solid theme('colors.border-subtle');
+            border-radius: 0.15em;
+            display: grid;
+            place-content: center;
+            cursor: pointer;
+        }
+        input[type="checkbox"]::before {
+            content: "";
+            width: 0.65em;
+            height: 0.65em;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+            box-shadow: inset 1em 1em theme('colors.background');
+            background-color: theme('colors.background');
+            transform-origin: center;
+            clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+        }
+        input[type="checkbox"]:checked {
+            background-color: theme('colors.primary');
+            border-color: theme('colors.primary');
+        }
+        input[type="checkbox"]:checked::before {
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-main antialiased min-h-screen flex">
+<!-- SideNavBar -->
+<nav class="h-screen w-64 fixed left-0 top-0 bg-surface-container-lowest border-r border-subtle flex flex-col py-8 gap-y-4 z-40 hidden md:flex">
+<!-- Brand/Header -->
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-8 h-8 rounded bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg" data-icon="data_exploration">data_exploration</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md text-primary">Discovery Engine</h1>
+<p class="font-metadata text-metadata text-text-muted">v4.2-stable</p>
+</div>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 flex flex-col gap-y-1 w-full">
+<a class="flex items-center gap-3 py-3 px-6 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-caps text-label-caps uppercase">Home</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-6 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-caps text-label-caps uppercase">Analysis</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-6 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="topic">topic</span>
+<span class="font-label-caps text-label-caps uppercase">Themes</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-6 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+<span class="font-label-caps text-label-caps uppercase">Metadata</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-6 text-primary font-bold border-l-2 border-primary bg-primary/5 translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="history" data-weight="fill">history</span>
+<span class="font-label-caps text-label-caps uppercase">History</span>
+</a>
+</div>
+<!-- CTA -->
+<div class="px-6 mt-auto mb-6 w-full">
+<button class="w-full bg-primary text-on-primary-fixed font-label-caps text-label-caps py-3 rounded-full hover:bg-primary-fixed transition-colors flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                New Run
+            </button>
+</div>
+<!-- Footer Links -->
+<div class="flex flex-col gap-y-1 w-full border-t border-subtle pt-4">
+<a class="flex items-center gap-3 py-2 px-6 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="help">help</span>
+<span class="font-metadata text-metadata">Documentation</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-6 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="contact_support">contact_support</span>
+<span class="font-metadata text-metadata">Support</span>
+</a>
+</div>
+</nav>
+<!-- Main Canvas -->
+<main class="flex-1 md:ml-64 p-margin-mobile md:p-margin-desktop w-full max-w-[1600px] mx-auto min-h-screen flex flex-col">
+<!-- Header Area -->
+<header class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-2">Run History</h2>
+<p class="font-theme-sentence text-theme-sentence text-text-muted">Review past syntheses and monitor active background jobs.</p>
+</div>
+<div class="flex items-center gap-4">
+<!-- Compare Mode Toggle -->
+<label class="flex items-center gap-2 cursor-pointer group">
+<span class="font-label-caps text-label-caps text-on-surface-variant group-hover:text-on-surface transition-colors">Compare Mode</span>
+<div class="relative inline-block w-10 h-6">
+<input class="peer sr-only" id="compareToggle" type="checkbox"/>
+<div class="block w-full h-full bg-surface-container-high border border-subtle rounded-full peer-checked:bg-primary transition-colors"></div>
+<div class="absolute left-1 top-1 bg-on-surface w-4 h-4 rounded-full transition-transform peer-checked:translate-x-4 peer-checked:bg-on-primary-fixed"></div>
+</div>
+</label>
+<button class="hidden opacity-0 bg-surface-high border border-subtle text-on-surface font-label-caps text-label-caps px-4 py-2 rounded-full hover:bg-surface-variant hover:border-primary/50 transition-all items-center gap-2" id="compareActionBtn">
+<span class="material-symbols-outlined text-sm" data-icon="compare_arrows">compare_arrows</span>
+                    Compare Selected
+                </button>
+</div>
+</header>
+<!-- Data Table Surface -->
+<div class="bg-surface-low border border-subtle rounded-xl flex-1 overflow-hidden flex flex-col relative">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse" id="runsTable">
+<thead>
+<tr class="border-b border-subtle bg-surface-container-lowest">
+<th class="compare-checkbox-col py-4 border-r border-subtle/50">
+<!-- Select all checkbox could go here -->
+</th>
+<th class="font-metadata text-metadata text-text-muted py-4 px-6 font-medium whitespace-nowrap">Run ID / Date</th>
+<th class="font-metadata text-metadata text-text-muted py-4 px-6 font-medium">Status</th>
+<th class="font-metadata text-metadata text-text-muted py-4 px-6 font-medium text-right">Reviews Analyzed</th>
+<th class="font-metadata text-metadata text-text-muted py-4 px-6 font-medium text-right">Duration</th>
+<th class="font-metadata text-metadata text-text-muted py-4 px-6 font-medium text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-subtle">
+<!-- Row 1: Success -->
+<tr class="table-row-hover transition-colors group">
+<td class="compare-checkbox-col py-4 border-r border-subtle/50 bg-surface-low group-hover:bg-surface-high">
+<input class="run-select-cb mx-auto block" type="checkbox"/>
+</td>
+<td class="py-4 px-6">
+<div class="flex flex-col">
+<span class="font-body-main text-body-main text-on-surface">SYN-88234</span>
+<span class="font-metadata text-metadata text-text-muted">16 Jun 2026, 14:30</span>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-label-caps text-[10px] tracking-wider uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                    Success
+                                </span>
+</td>
+<td class="py-4 px-6 text-right font-metadata text-metadata text-on-surface-variant">23,166</td>
+<td class="py-4 px-6 text-right font-metadata text-metadata text-on-surface-variant">2m 14s</td>
+<td class="py-4 px-6 text-right">
+<a class="inline-flex items-center gap-1 font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors" href="#">
+                                    View Results
+                                    <span class="material-symbols-outlined text-[16px]" data-icon="chevron_right">chevron_right</span>
+</a>
+</td>
+</tr>
+<!-- Row 2: Running -->
+<tr class="table-row-hover transition-colors group">
+<td class="compare-checkbox-col py-4 border-r border-subtle/50 bg-surface-low group-hover:bg-surface-high">
+<input class="run-select-cb mx-auto block" disabled="" type="checkbox"/>
+</td>
+<td class="py-4 px-6">
+<div class="flex flex-col">
+<span class="font-body-main text-body-main text-on-surface">SYN-88235</span>
+<span class="font-metadata text-metadata text-text-muted">16 Jun 2026, 15:45</span>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-container/10 border border-secondary-container/20 text-secondary-container font-label-caps text-[10px] tracking-wider uppercase animate-pulse">
+<span class="material-symbols-outlined text-[12px] animate-spin" data-icon="sync">sync</span>
+                                    Running
+                                </span>
+</td>
+<td class="py-4 px-6 text-right font-metadata text-metadata text-on-surface-variant">--</td>
+<td class="py-4 px-6 text-right font-metadata text-metadata text-on-surface-variant">1m 02s</td>
+<td class="py-4 px-6 text-right">
+<button class="inline-flex items-center gap-1 font-label-caps text-label-caps text-text-muted cursor-not-allowed">
+                                    Processing
+                                </button>
+</td>
+</tr>
+<!-- Row 3: Partial -->
+<tr class="table-row-hover transition-colors group">
+<td class="compare-checkbox-col py-4 border-r border-subtle/50 bg-surface-low group-hover:bg-surface-high">
+<input class="run-select-cb mx-auto block" type="checkbox"/>
+</td>
+<td class="py-4 px-6">
+<div class="flex flex-col">
+<span class="font-body-main text-body-main text-on-surface">SYN-88230</span>
+<span class="font-metadata text-metadata text-text-muted">15 Jun 2026, 09:12</span>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-status-warning/10 border border-status-warning/20 text-status-warning font-label-caps text-[10px] tracking-wider uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-status-warning"></span>
+                                    Partial
+                                </span>
+</td>
+<td class="py-4 px-6 text-right font-metadata text-metadata text-on-surface-variant">18,042</td>
+<td class="py-4 px-6 text-right font-metadata text-metadata text-on-surface-variant">3m 45s</td>
+<td class="py-4 px-6 text-right">
+<a class="inline-flex items-center gap-1 font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors" href="#">
+                                    View Results
+                                    <span class="material-symbols-outlined text-[16px]" data-icon="chevron_right">chevron_right</span>
+</a>
+</td>
+</tr>
+<!-- Row 4: Failed -->
+<tr class="table-row-hover transition-colors group">
+<td class="compare-checkbox-col py-4 border-r border-subtle/50 bg-surface-low group-hover:bg-surface-high">
+<input class="run-select-cb mx-auto block" disabled="" type="checkbox"/>
+</td>
+<td class="py-4 px-6">
+<div class="flex flex-col">
+<span class="font-body-main text-body-main text-on-surface">SYN-88225</span>
+<span class="font-metadata text-metadata text-text-muted">14 Jun 2026, 18:00</span>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-status-error/10 border border-status-error/20 text-status-error font-label-caps text-[10px] tracking-wider uppercase">
+<span class="material-symbols-outlined text-[12px]" data-icon="error">error</span>
+                                    Failed
+                                </span>
+</td>
+<td class="py-4 px-6 text-right font-metadata text-metadata text-on-surface-variant">--</td>
+<td class="py-4 px-6 text-right font-metadata text-metadata text-on-surface-variant">0m 12s</td>
+<td class="py-4 px-6 text-right">
+<a class="inline-flex items-center gap-1 font-label-caps text-label-caps text-status-error hover:text-error transition-colors" href="#">
+                                    View Logs
+                                    <span class="material-symbols-outlined text-[16px]" data-icon="receipt_long">receipt_long</span>
+</a>
+</td>
+</tr>
+<!-- Row 5: Success Older -->
+<tr class="table-row-hover transition-colors group">
+<td class="compare-checkbox-col py-4 border-r border-subtle/50 bg-surface-low group-hover:bg-surface-high">
+<input class="run-select-cb mx-auto block" type="checkbox"/>
+</td>
+<td class="py-4 px-6">
+<div class="flex flex-col">
+<span class="font-body-main text-body-main text-on-surface">SYN-88210</span>
+<span class="font-metadata text-metadata text-text-muted">10 Jun 2026, 11:20</span>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-label-caps text-[10px] tracking-wider uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                    Success
+                                </span>
+</td>
+<td class="py-4 px-6 text-right font-metadata text-metadata text-on-surface-variant">45,991</td>
+<td class="py-4 px-6 text-right font-metadata text-metadata text-on-surface-variant">4m 58s</td>
+<td class="py-4 px-6 text-right">
+<a class="inline-flex items-center gap-1 font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors" href="#">
+                                    View Results
+                                    <span class="material-symbols-outlined text-[16px]" data-icon="chevron_right">chevron_right</span>
+</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination / Footer of table -->
+<div class="mt-auto border-t border-subtle bg-surface-container-lowest p-4 flex justify-between items-center">
+<span class="font-metadata text-metadata text-text-muted">Showing 1-5 of 142 runs</span>
+<div class="flex gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded border border-subtle text-on-surface-variant hover:bg-surface-high hover:text-on-surface transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-subtle text-on-surface-variant hover:bg-surface-high hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Simple Interaction Logic for Compare Mode
+        const toggle = document.getElementById('compareToggle');
+        const table = document.getElementById('runsTable');
+        const actionBtn = document.getElementById('compareActionBtn');
+        const checkboxes = document.querySelectorAll('.run-select-cb:not([disabled])');
+
+        toggle.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                table.classList.add('compare-mode-active');
+                actionBtn.classList.remove('hidden');
+                // Small delay to allow display:flex to apply before fading in
+                setTimeout(() => {
+                    actionBtn.classList.remove('opacity-0');
+                    actionBtn.classList.add('flex');
+                }, 10);
+            } else {
+                table.classList.remove('compare-mode-active');
+                actionBtn.classList.add('opacity-0');
+                setTimeout(() => {
+                    actionBtn.classList.add('hidden');
+                    actionBtn.classList.remove('flex');
+                }, 200); // match transition duration roughly
+                
+                // uncheck all when exiting mode
+                checkboxes.forEach(cb => cb.checked = false);
+                updateCompareButton();
+            }
+        });
+
+        function updateCompareButton() {
+            const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+            if (checkedCount >= 2) {
+                actionBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                actionBtn.classList.add('bg-primary', 'text-on-primary-fixed', 'border-primary');
+                actionBtn.classList.remove('bg-surface-high', 'text-on-surface', 'border-subtle');
+            } else {
+                actionBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                actionBtn.classList.remove('bg-primary', 'text-on-primary-fixed', 'border-primary');
+                actionBtn.classList.add('bg-surface-high', 'text-on-surface', 'border-subtle');
+            }
+        }
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', updateCompareButton);
+        });
+        
+        // Init state
+        updateCompareButton();
+    </script>
+</body></html>
