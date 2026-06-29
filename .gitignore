@@ -10,6 +10,8 @@ env/
 frontend/node_modules/
 frontend/.next/
 backend/.venv/
+phase5-operations/.venv/
+phase5-operations/reports/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/

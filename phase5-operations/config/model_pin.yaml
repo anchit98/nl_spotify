@@ -1,0 +1,6 @@
+# Pin the Groq model and prompt set used for comparable synthesis runs.
+# Update prompt_version when phase3_insights/prompts.py changes materially.
+
+groq_model: llama-3.3-70b-versatile
+prompt_version: 2026-06-v1
+notes: Initial Phase 5 pin — SQL aggregate + 7 Groq calls per run

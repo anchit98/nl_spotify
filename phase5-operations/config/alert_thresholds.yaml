@@ -1,0 +1,19 @@
+# Alert thresholds — tune to reduce false positives (edge case 5.2)
+
+# Minimum prior snapshots before drift checks apply
+min_snapshots_for_baseline: 3
+
+# Alert if a source's latest collection volume is below this % of its rolling median
+collection_volume_drop_pct: 50
+
+# Alert if clean corpus shrinks by more than this % vs previous snapshot
+corpus_shrink_pct: 10
+
+# Theme spike: mention_count must rise by this % in TWO consecutive synthesis runs
+theme_spike_pct: 75
+theme_spike_min_mentions: 10
+
+# Synthesis health
+alert_on_synthesis_failure: true
+alert_on_missing_executive_summary: true
+alert_on_model_mismatch: true

@@ -28,7 +28,7 @@ flowchart LR
 Before you start, have these ready:
 
 - [ ] GitHub repository with this code pushed to `main`
-- [ ] [Supabase](https://supabase.com) project with migrations applied (`raw`, `clean`, `insights` schemas)
+- [ ] [Supabase](https://supabase.com) project with migrations applied (`raw`, `clean`, `insights`, `ops` schemas)
 - [ ] At least one successful **Phase 3 synthesis** (so `/api/insights/latest` returns data)
 - [ ] [Groq](https://console.groq.com) API key
 - [ ] [Render](https://render.com) account
@@ -61,8 +61,11 @@ In GitHub: **Settings → Secrets and variables → Actions → New repository s
 | `SUPABASE_PROJECT_ANON_KEY` | Supabase anon/public key |
 | `SUPABASE_JWT_SECRET` | Optional; leave empty if unused |
 | `GROQ_API_KEY` | Groq API key |
+| `ALERT_WEBHOOK_URL` | Optional — Slack/Discord webhook for Phase 5 alerts |
 
 **Test the pipeline:** **Actions → Data Pipeline (Phases 1-3) → Run workflow** → mode `probe` (cheap) or `weekly`.
+
+**Phase 5:** After applying [`phase5-operations/sql/`](../phase5-operations/sql/) in Supabase, the **Phase 5 Monitor** workflow runs automatically after a successful pipeline (see [`phase5-operations/README.md`](../phase5-operations/README.md)).
 
 ---
 

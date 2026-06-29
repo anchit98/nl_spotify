@@ -304,6 +304,8 @@ User feedback is a moving target. New features launch, new complaints appear, se
 - A scheduled review meeting where insights are translated into product action.
 - A versioned record (including which Groq model version) of what changed in each refresh.
 
+> **Implementation:** [`phase5-operations/`](../phase5-operations/) — `ops` schema, drift monitor CLI, GitHub Actions `phase5-monitor.yml`, and weekly review templates.
+
 **Who is involved:** Data engineer, data scientist, product lead, user researcher.
 
 **Risks to watch for:**
