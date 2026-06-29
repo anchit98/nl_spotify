@@ -10,6 +10,13 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 BACKEND_ROOT = Path(__file__).resolve().parents[2]
 
 
+def supabase_project_ref(url: str) -> str:
+    import re
+
+    match = re.match(r"https://([^.]+)\.supabase\.co", url.rstrip("/"))
+    return match.group(1) if match else ""
+
+
 def load_environment() -> None:
     load_dotenv(REPO_ROOT / ".env")
     load_dotenv(BACKEND_ROOT / ".env")
@@ -25,6 +32,8 @@ class Settings:
     repo_root: Path
     groq_api_key: str
     groq_model: str
+    app_env: str
+    expected_supabase_ref: str | None
 
     @classmethod
     def from_env(cls) -> Settings:
@@ -47,4 +56,6 @@ class Settings:
             repo_root=REPO_ROOT,
             groq_api_key=os.getenv("GROQ_API_KEY", ""),
             groq_model=os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
+            app_env=os.getenv("APP_ENV", "development"),
+            expected_supabase_ref=os.getenv("EXPECTED_SUPABASE_PROJECT_REF") or None,
         )

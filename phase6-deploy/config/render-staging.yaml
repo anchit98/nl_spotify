@@ -1,11 +1,12 @@
-# Render Blueprint — deploy from repo root via Dashboard → New → Blueprint.
-# Docs: docs/deployment.md
+# Render staging web service — separate from production (edge case 6.3).
+# Deploy via Dashboard → New → Blueprint (point at this file) or manual Web Service.
 services:
   - type: web
-    name: nl-spotify-api
+    name: nl-spotify-api-staging
     runtime: python
     plan: starter
     region: frankfurt
+    branch: main
     buildCommand: pip install -r backend/requirements-deploy.txt
     startCommand: PYTHONPATH=backend/src uvicorn backend_api.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health/ready
@@ -13,12 +14,12 @@ services:
       - key: PYTHON_VERSION
         value: "3.11"
       - key: APP_ENV
-        value: production
-      - key: EXPECTED_SUPABASE_PROJECT_REF
-        sync: false
+        value: staging
       - key: SUPABASE_PROJECT_URL
         sync: false
       - key: SUPABASE_PROJECT_ANON_KEY
+        sync: false
+      - key: EXPECTED_SUPABASE_PROJECT_REF
         sync: false
       - key: GROQ_API_KEY
         sync: false

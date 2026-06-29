@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 
 from backend_api.config import Settings
 from backend_api.db import InsightsDatabase, clear_response_caches
+from backend_api.health import liveness, readiness
 from backend_api.pm_buddy import chat as pm_buddy_chat
 from backend_api.synthesis import start_synthesis, synthesis_status
 
@@ -28,7 +29,15 @@ app.add_middleware(
 
 @app.get("/health")
 def health() -> dict[str, str]:
-    return {"status": "ok"}
+    return liveness()
+
+
+@app.get("/health/ready")
+def health_ready() -> dict:
+    def _probe() -> None:
+        db.list_runs(limit=1)
+
+    return readiness(settings, _probe)
 
 
 @app.get("/api/insights/latest")

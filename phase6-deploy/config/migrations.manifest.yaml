@@ -1,0 +1,31 @@
+# Ordered SQL migrations — run via phase6_deploy migrations validate|dry-run
+# Prefer additive, backward-compatible changes (edge case 6.4).
+
+migrations:
+  - id: raw_schema
+    path: phase1-collection/sql/001_raw_schema.sql
+    schema: raw
+  - id: raw_api
+    path: phase1-collection/sql/002_supabase_api_setup.sql
+    schema: raw
+  - id: clean_schema
+    path: phase2-cleaning/sql/001_clean_schema.sql
+    schema: clean
+  - id: clean_api
+    path: phase2-cleaning/sql/002_clean_api_setup.sql
+    schema: clean
+  - id: insights_schema
+    path: phase3-enrichment/sql/001_insights_schema.sql
+    schema: insights
+  - id: insights_api
+    path: phase3-enrichment/sql/002_insights_api_setup.sql
+    schema: insights
+  - id: insights_top_themes
+    path: phase3-enrichment/sql/003_add_top_themes_column.sql
+    schema: insights
+  - id: ops_schema
+    path: phase5-operations/sql/001_ops_schema.sql
+    schema: ops
+  - id: ops_api
+    path: phase5-operations/sql/002_ops_api_setup.sql
+    schema: ops

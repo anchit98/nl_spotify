@@ -12,6 +12,7 @@ frontend/.next/
 backend/.venv/
 phase5-operations/.venv/
 phase5-operations/reports/
+phase6-deploy/.venv/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/

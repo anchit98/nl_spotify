@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { EnvironmentBanner } from "@/components/EnvironmentBanner";
 import { InsightsDataProvider } from "@/components/InsightsDataProvider";
 import { Sidebar } from "@/components/Sidebar";
 import "./globals.css";
@@ -28,6 +29,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.variable} antialiased`} suppressHydrationWarning>
+        <EnvironmentBanner />
         <InsightsDataProvider>
           <Sidebar />
           <main className="flex-1 md:ml-64 min-h-screen pt-16 md:pt-0">{children}</main>

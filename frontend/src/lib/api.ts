@@ -1,6 +1,30 @@
 import type { InsightsBundle, PmBuddyChatResponse, PmBuddyChatTurn, ReviewTrends, SynthesisStatus, SynthesisRun, TrendGranularity } from "./types";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+const API_BASE = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000").replace(/\/$/, "");
+
+function networkErrorMessage(): string {
+  const base = API_BASE;
+  if (base.includes("localhost") || base.includes("127.0.0.1")) {
+    return (
+      `Cannot reach the insights API (trying ${base}). ` +
+      "NEXT_PUBLIC_API_URL is not set on Vercel — add your Render URL under Project Settings → Environment Variables, then redeploy."
+    );
+  }
+  if (
+    typeof window !== "undefined" &&
+    window.location.protocol === "https:" &&
+    base.startsWith("http://")
+  ) {
+    return (
+      `Cannot reach the insights API (${base}). ` +
+      "Use https:// for NEXT_PUBLIC_API_URL when the frontend is on HTTPS."
+    );
+  }
+  return (
+    `Cannot reach the insights API at ${base}. ` +
+    "Confirm Render is awake, the URL is correct, and CORS_ORIGINS on Render includes this Vercel domain (or set CORS_ORIGIN_REGEX for previews)."
+  );
+}
 
 class ApiError extends Error {
   constructor(
@@ -23,10 +47,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
       cache: "no-store",
     });
   } catch {
-    throw new ApiError(
-      "Cannot reach the insights API. Check that the backend is running.",
-      0,
-    );
+    throw new ApiError(networkErrorMessage(), 0);
   }
 
   if (!response.ok) {

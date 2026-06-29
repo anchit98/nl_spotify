@@ -62,10 +62,14 @@ In GitHub: **Settings → Secrets and variables → Actions → New repository s
 | `SUPABASE_JWT_SECRET` | Optional; leave empty if unused |
 | `GROQ_API_KEY` | Groq API key |
 | `ALERT_WEBHOOK_URL` | Optional — Slack/Discord webhook for Phase 5 alerts |
+| `STAGING_API_URL` | Optional — Phase 6 post-deploy smoke (staging Render URL) |
+| `PRODUCTION_API_URL` | Optional — Phase 6 post-deploy smoke (production Render URL) |
 
 **Test the pipeline:** **Actions → Data Pipeline (Phases 1-3) → Run workflow** → mode `probe` (cheap) or `weekly`.
 
 **Phase 5:** After applying [`phase5-operations/sql/`](../phase5-operations/sql/) in Supabase, the **Phase 5 Monitor** workflow runs automatically after a successful pipeline (see [`phase5-operations/README.md`](../phase5-operations/README.md)).
+
+**Phase 6:** Enable branch protection per [`phase6-deploy/docs/branch-protection.md`](../phase6-deploy/docs/branch-protection.md). Set `EXPECTED_SUPABASE_PROJECT_REF` on Render and `NEXT_PUBLIC_APP_ENV` on Vercel (see [`phase6-deploy/docs/staging-production.md`](../phase6-deploy/docs/staging-production.md)).
 
 ---
 
@@ -92,7 +96,7 @@ In GitHub: **Settings → Secrets and variables → Actions → New repository s
 | **Runtime** | Python 3.11 |
 | **Build command** | `pip install -r backend/requirements-deploy.txt` |
 | **Start command** | `PYTHONPATH=backend/src uvicorn backend_api.main:app --host 0.0.0.0 --port $PORT` |
-| **Health check path** | `/health` |
+| **Health check path** | `/health/ready` |
 
 Add the environment variables from [`.env.example`](../.env.example). At minimum:
 

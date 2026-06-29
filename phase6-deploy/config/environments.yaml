@@ -1,0 +1,23 @@
+# Environment pairing rules (edge case 6.3 — staging/production must not cross)
+
+environments:
+  production:
+    app_env: production
+    backend_service: nl-spotify-api
+    frontend_project: nl-spotify
+    database: production-supabase-project
+    notes: Live users; promote from staging after smoke passes
+
+  staging:
+    app_env: staging
+    backend_service: nl-spotify-api-staging
+    frontend_project: nl-spotify-staging
+    database: staging-supabase-project
+    notes: Auto-deploy from main; separate Supabase project required
+
+pairing_rules:
+  - production frontend must set NEXT_PUBLIC_APP_ENV=production
+  - staging frontend must set NEXT_PUBLIC_APP_ENV=staging and show environment banner
+  - backend APP_ENV must match NEXT_PUBLIC_APP_ENV of the paired frontend
+  - EXPECTED_SUPABASE_PROJECT_REF on backend must match the Supabase URL host prefix
+  - never share SUPABASE_PROJECT_URL between staging and production

@@ -362,6 +362,8 @@ flowchart LR
 
 **Outputs:** Automated, reviewed deployments to Render and Vercel; a protected repo; and a written runbook for emergencies.
 
+> **Implementation:** [`phase6-deploy/`](../phase6-deploy/) — CI scripts, secret scan, migration manifest, `/health/ready`, staging config, and break-glass runbook.
+
 **Who is involved:** Backend developer, frontend developer, data engineer, with product sign-off on what reaches production.
 
 **Risks to watch for:**

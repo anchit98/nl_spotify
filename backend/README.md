@@ -27,7 +27,8 @@ Requires repo-root `.env` with:
 
 | Method | Path | Description |
 |---|---|---|
-| GET | `/health` | Health check |
+| GET | `/health` | Liveness probe (shallow) |
+| GET | `/health/ready` | Readiness probe — Supabase, Groq key, env pairing (Render health check) |
 | GET | `/api/insights/latest` | Latest successful run bundle; KPIs refreshed from live `dataset_stats` and quotes re-selected on read |
 | GET | `/api/insights/runs` | Run history |
 | GET | `/api/insights/runs/{id}` | Specific run bundle |

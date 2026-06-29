@@ -42,7 +42,17 @@ jobs:
           PYTHONPATH: ${{ github.workspace }}/phase1-collection/src
         run: |
           MODE="${{ github.event.inputs.mode || 'weekly' }}"
-          python -m phase1_collection.runner --mode "$MODE"
+          for attempt in 1 2 3; do
+            echo "Collection attempt $attempt..."
+            if python -m phase1_collection.runner --mode "$MODE"; then
+              exit 0
+            fi
+            if [ "$attempt" -lt 3 ]; then
+              echo "Retrying in 30s..."
+              sleep 30
+            fi
+          done
+          exit 1
 
   clean:
     name: Phase 2 - Cleaning
@@ -68,7 +78,16 @@ jobs:
           SUPABASE_PROJECT_ANON_KEY: ${{ secrets.SUPABASE_PROJECT_ANON_KEY }}
           PYTHONPATH: ${{ github.workspace }}/phase2-cleaning/src
         run: |
-          python -m phase2_cleaning.cleaner
+          for attempt in 1 2 3; do
+            echo "Cleaning attempt $attempt..."
+            if python -m phase2_cleaning.cleaner; then
+              exit 0
+            fi
+            if [ "$attempt" -lt 3 ]; then
+              sleep 30
+            fi
+          done
+          exit 1
 
   synthesize:
     name: Phase 3 - Insight synthesis (Groq)
@@ -95,4 +114,14 @@ jobs:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           PYTHONPATH: ${{ github.workspace }}/phase3-enrichment/src
         run: |
-          python -m phase3_insights.synthesizer
+          for attempt in 1 2; do
+            echo "Synthesis attempt $attempt..."
+            if python -m phase3_insights.synthesizer; then
+              exit 0
+            fi
+            if [ "$attempt" -lt 2 ]; then
+              echo "Retrying in 60s..."
+              sleep 60
+            fi
+          done
+          exit 1
